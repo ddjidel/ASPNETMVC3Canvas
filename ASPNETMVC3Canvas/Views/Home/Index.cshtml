@@ -1,0 +1,42 @@
+﻿@using CanvasClasses;
+
+@{
+    String _consumerSecret = Environment.GetEnvironmentVariable("CANVAS_CONSUMER_SECRET", EnvironmentVariableTarget.Machine); 
+    String _signedRequestParam = Request.Params["signed_request"];
+    
+    if (_signedRequestParam == null)
+    {
+        return;
+    }
+    
+    String _signedRequestJson = SignedRequest.verifyAndDecodeAsJson(_signedRequestParam, _consumerSecret);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Hello World Canvas .NET Example</title>
+    <link rel="stylesheet" href="ASPNETMVC3Canvas/Content/canvas.css"/>
+    <script src="ASPNETMVC3Canvas/Scripts/canvas-all.js"></script>
+    <script src="ASPNETMVC3Canvas/Scripts/json2.js"></script>
+    <script>
+
+        Sfdc.canvas(function () {
+            var sr = JSON.parse('@_signedRequestJson'.replace(/&quot;/g, "\""));
+
+            Sfdc.canvas.oauth.token(sr.oauthToken);
+            Sfdc.canvas.byId('username').innerHTML = sr.context.user.fullName;
+        });
+
+    </script>
+</head>
+
+<body> 
+    <br/>
+    <h1>Hello
+        <span id='username'></span>
+    </h1>
+</body>  
+</html>
