@@ -18,9 +18,9 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Hello World Canvas .NET Example</title>
-    <link rel="stylesheet" href="ASPNETMVC3Canvas/Content/canvas.css"/>
-    <script src="ASPNETMVC3Canvas/Scripts/canvas-all.js"></script>
-    <script src="ASPNETMVC3Canvas/Scripts/json2.js"></script>
+    <link rel="stylesheet" href="Content/canvas.css"/>
+    <script src="Scripts/canvas-all.js"></script>
+    <script src="Scripts/json2.js"></script>
     <script>
 
         Sfdc.canvas(function () {
@@ -28,6 +28,21 @@
 
             Sfdc.canvas.oauth.token(sr.oauthToken);
             Sfdc.canvas.byId('username').innerHTML = sr.context.user.fullName;
+
+            var body = { "Name": "Axa Assistance" };
+            var url = sr.context.links.sobjectUrl + "Account";
+
+            Sfdc.canvas.client.ajax(url, {
+                client: sr.client,
+                method: 'POST',
+                contentType: "application/json",
+                data: JSON.stringify(body),
+                success: function (data) {
+                    if (data.status === 201) {
+                        alert('Account Created');
+                    }
+                }
+            });
         });
 
     </script>
