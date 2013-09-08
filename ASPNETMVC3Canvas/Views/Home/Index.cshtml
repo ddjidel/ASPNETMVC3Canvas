@@ -29,7 +29,17 @@
             Sfdc.canvas.oauth.token(sr.oauthToken);
             Sfdc.canvas.byId('username').innerHTML = sr.context.user.fullName;
 
-            var body = { "Name": "Axa Assistance" };
+            var objectId = sr.context.environment.parameters.objectId;
+            console.log(objectId);
+
+            Sfdc.canvas.client.subscribe(sr.client, {
+                name: 'vf.event', onData: function (event) {
+                    console.log("Subscribed to custom event ", event);
+                }
+            }
+            );
+
+            /* var body = { "Name": "Axa Assistance" };
             var url = sr.context.links.sobjectUrl + "Account";
 
             Sfdc.canvas.client.ajax(url, {
@@ -42,7 +52,7 @@
                         alert('Account Created');
                     }
                 }
-            });
+            }); */
         });
 
     </script>
